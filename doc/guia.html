@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Mbox Pro en macOS Sequoia</title>
+<style>
+  @page { size: A4; margin: 18mm 17mm 18mm 17mm; }
+  :root { --tinta:#1d1f23; --suave:#5b616b; --linea:#d9dce1; --acento:#0b5cad; --fondo-cod:#f3f4f6; --aviso:#fff6e0; --aviso-borde:#e0a800; }
+  body { font-family: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif; color: var(--tinta);
+         font-size: 10.5pt; line-height: 1.5; margin: 0; background: #fff; }
+  h1 { font-size: 24pt; margin: 0 0 4pt; letter-spacing: -0.3pt; }
+  .sub { color: var(--suave); font-size: 12pt; margin: 0 0 16pt; }
+  h2 { font-size: 14pt; color: var(--acento); margin: 20pt 0 6pt; padding-bottom: 3pt; border-bottom: 1px solid var(--linea);
+       break-after: avoid; }
+  h3 { font-size: 11.5pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p, li { margin: 0 0 6pt; }
+  ul, ol { padding-left: 18pt; margin: 0 0 8pt; }
+  code { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: var(--fondo-cod); padding: 1pt 3pt; border-radius: 3px; }
+  pre { font-family: "SF Mono", Menlo, monospace; font-size: 9pt; background: var(--fondo-cod); padding: 8pt 10pt;
+        border-radius: 5px; white-space: pre-wrap; margin: 4pt 0 10pt; break-inside: avoid; }
+  pre code { background: none; padding: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 4pt 0 10pt; font-size: 9.8pt; break-inside: avoid; }
+  th, td { border: 1px solid var(--linea); padding: 4pt 6pt; text-align: left; vertical-align: top; }
+  th { background: #f7f8fa; }
+  .aviso { background: var(--aviso); border-left: 4px solid var(--aviso-borde); padding: 7pt 10pt; margin: 8pt 0 10pt;
+           border-radius: 3px; break-inside: avoid; }
+  .caja { border: 1px solid var(--linea); border-radius: 5px; padding: 8pt 11pt; margin: 8pt 0; break-inside: avoid; }
+  .portada { border-bottom: 3px solid var(--acento); padding-bottom: 10pt; margin-bottom: 14pt; }
+  .meta { font-size: 9pt; color: var(--suave); }
+  .salto { break-before: page; }
+  .ok { color: #1a7f37; font-weight: 600; }
+  .pend { color: #9a6700; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<div class="portada">
+  <h1>Avid Mbox Pro en macOS Sequoia</h1>
+  <p class="sub">Driver libre para la Mbox Pro de 3.ª generación (FireWire), sin desactivar SIP y sin cuenta de desarrollador de Apple</p>
+  <p class="meta">Versión 1.0 · octubre de 2026 · Probado en MacBook Pro 15" 2018 (Intel), macOS 15.8.1</p>
+</div>
+
+<h2>1. Qué es esto</h2>
+<p>Avid dejó de dar soporte a la Mbox Pro de 3.ª generación después de macOS Mojave. El aparato
+funciona perfectamente; lo que falta es el driver. Este paquete hace que vuelva a aparecer en el Mac
+como una interfaz de audio normal, <b>«Mbox Pro (FireWire)»</b>, utilizable por cualquier programa:
+navegador, Música, REAPER, Logic, Ableton…</p>
+<p>No toca el sistema: no instala extensiones del kernel ni pide desactivar la protección del sistema (SIP).
+Son tres piezas pequeñas que se compilan en tu propio Mac:</p>
+<table>
+  <tr><th>Pieza</th><th>Dónde queda</th><th>Qué hace</th></tr>
+  <tr><td>Plugin de audio</td><td><code>/Library/Audio/Plug-Ins/HAL/MboxPro.driver</code></td><td>Publica la Mbox como aparato de audio de macOS.</td></tr>
+  <tr><td>Ayudante <code>mboxd</code></td><td><code>/Library/Application Support/MboxPro/</code></td><td>Habla FireWire con la Mbox y mueve el audio.</td></tr>
+  <tr><td>Agente de inicio</td><td><code>/Library/LaunchAgents/lab.remedia.mboxd.plist</code></td><td>Arranca el ayudante al iniciar sesión y lo relanza si hace falta.</td></tr>
+</table>
+
+<h2>2. Antes de empezar</h2>
+<h3>Necesitas</h3>
+<ul>
+  <li><b>Una Avid Mbox Pro de 3.ª generación</b> (la de 2011, FireWire 400). No sirve para la Mbox 2 Pro ni para las Mbox USB.</li>
+  <li><b>macOS con pila FireWire de Apple</b>: hasta <b>macOS 15 Sequoia</b>. Apple la retiró en macOS 26 Tahoe; para Tahoe existe otro camino (el driver ASFireWire), que no es este paquete.</li>
+  <li><b>Una conexión FireWire.</b> Los Mac con Thunderbolt 3/USB‑C necesitan el adaptador de Apple Thunderbolt 3 (USB‑C) a Thunderbolt 2 y el adaptador Thunderbolt a FireWire 800, más un cable FireWire 800 a 400.</li>
+  <li><b>Las herramientas de línea de comandos de Apple</b> (gratis). Si no las tienes, el instalador abre su instalación.</li>
+  <li>Una cuenta de administrador del Mac (se pide la contraseña una vez).</li>
+</ul>
+<h3>Comprueba que el Mac ve la Mbox</h3>
+<p>Con la Mbox conectada y encendida, abre <b>Terminal</b> y escribe:</p>
+<pre><code>system_profiler SPFireWireDataType</code></pre>
+<p>Debe aparecer <b>«Mbox Pro»</b> con fabricante <b>Avid</b>. Si sale vacío, revisa cables y adaptadores antes de seguir:
+el problema está ahí, no en el driver.</p>
+
+<h2>3. Instalación</h2>
+<ol>
+  <li>Copia la carpeta <code>mbox-sequoia</code> donde quieras, por ejemplo al Escritorio.</li>
+  <li>Abre <b>Terminal</b> y escribe (ajusta la ruta si la pusiste en otro sitio):
+<pre><code>~/Desktop/mbox-sequoia/instalar.sh</code></pre></li>
+  <li>Si te pide instalar las herramientas de línea de comandos, acepta, espera a que terminen y vuelve a lanzar el mismo comando.</li>
+  <li>Escribe tu contraseña cuando la pida. El audio del Mac se corta un segundo mientras se reinicia el servicio de sonido.</li>
+  <li>Al final verás unas líneas del registro. La que importa es:
+<pre><code>mboxd: SYT a +5 ciclos -> receptor de la Mbox ENGANCHADO</code></pre>
+  (el número puede variar: +3, +5…). Que antes salgan una o dos líneas «sin enganchar» es normal: el ayudante prueba hasta acertar.</li>
+</ol>
+<div class="aviso"><b>No lo lances con <code>sudo</code>.</b> El instalador pide la contraseña él mismo, solo para el paso que la necesita.</div>
+
+<h2>4. Uso</h2>
+<h3>Lo único que hay que recordar</h3>
+<div class="aviso"><b>Después de encender la Mbox, todo está en silencio hasta que giras la rueda de monitor.</b>
+La rueda no tiene tope: es un codificador que arranca en cero cada vez que la Mbox se enciende. Súbela y el sonido aparece.</div>
+<h3>Elegir la Mbox como salida</h3>
+<p><b>Ajustes del Sistema → Sonido → Salida → «Mbox Pro (FireWire)»</b>. En programas de audio (REAPER, Logic, Ableton…), elígela en sus preferencias de dispositivo.</p>
+<h3>Qué sale por dónde</h3>
+<table>
+  <tr><th>Canales del ordenador</th><th>Salida de la Mbox</th><th>Volumen</th></tr>
+  <tr><td>1–2 (el estéreo de cualquier programa)</td><td>Líneas 1–2 <b>y</b> los dos auriculares</td><td>Rueda de monitor (líneas) · ruedas propias (auriculares)</td></tr>
+  <tr><td>3, 4, 5, 6</td><td>Líneas 3, 4, 5, 6, cada una por separado</td><td>Rueda de monitor</td></tr>
+  <tr><td>7–8</td><td>S/PDIF</td><td>Fijo (digital)</td></tr>
+</table>
+<p>Es la configuración habitual de una interfaz: el estéreo del sistema va a los monitores principales y a los auriculares,
+y los canales 3 a 6 quedan libres para programas que los usan aparte (espacialización, monitores adicionales…).
+La rueda de monitor actúa como <b>volumen general de las seis salidas analógicas</b>, con la misma curva que el driver original de Avid.</p>
+<h3>Programas de audio y latencia</h3>
+<ul>
+  <li>Frecuencia de muestreo: <b>48 kHz</b> fija. Si el programa ofrece cambiarla, déjala en 48 000.</li>
+  <li>Tamaño de búfer: funciona de 64 a 512 muestras sin cortes. La latencia de salida se ajusta sola al búfer que use cada programa (≈ 10 ms con 512, ≈ 25 ms con búferes pequeños).</li>
+  <li>En REAPER: <i>Preferencias → Audio → Device</i>, marca <i>Request block size</i> y escribe el valor.</li>
+</ul>
+
+<h2 class="salto">5. Si algo no va</h2>
+<h3>El diagnóstico</h3>
+<p>Un solo comando, que solo lee y te dice qué pieza falla:</p>
+<pre><code>~/Desktop/mbox-sequoia/estado.sh</code></pre>
+<p>Revisa las piezas instaladas, si el ayudante corre, la pila FireWire, si macOS ve la Mbox y las últimas líneas del registro
+(<code>~/Library/Logs/MboxPro.log</code>).</p>
+
+<h3>Problemas frecuentes</h3>
+<table>
+  <tr><th style="width:32%">Síntoma</th><th>Qué hacer</th></tr>
+  <tr><td>No suena nada, pero todo aparece bien</td><td><b>Sube la rueda de monitor.</b> Tras cada encendido de la Mbox arranca en silencio.</td></tr>
+  <tr><td>No suena tras encender la Mbox con el Mac ya encendido</td><td>Espera unos 10 segundos: el ayudante detecta la Mbox y la configura solo. Luego sube la rueda.</td></tr>
+  <tr><td>El diagnóstico dice «COLGADO» en FireWire</td><td>La pila FireWire de macOS se quedó atascada (pasa a veces al desconectar en caliente). <b>Reinicia el Mac.</b> Apagar la Mbox no sirve.</td></tr>
+  <tr><td>«no veo la Mbox Pro»</td><td>Comprueba que está encendida, el cable y los adaptadores. <code>system_profiler SPFireWireDataType</code> debe listarla.</td></tr>
+  <tr><td>No aparece «Mbox Pro (FireWire)» en Sonido</td><td>Vuelve a lanzar <code>instalar.sh</code>. Si persiste, reinicia el Mac.</td></tr>
+  <tr><td>Un programa dejó de sonar tras reiniciar el ayudante</td><td>Pausa y vuelve a reproducir, o vuelve a seleccionar la Mbox en el programa.</td></tr>
+</table>
+<p>En el registro, la línea «entradas en silencio» al arrancar es normal si no hay nada conectado a las entradas.</p>
+
+<h2>6. Desinstalar</h2>
+<pre><code>~/Desktop/mbox-sequoia/desinstalar.sh</code></pre>
+<p>Quita las tres piezas y deja la Mbox en reposo. El registro queda en <code>~/Library/Logs/MboxPro.log</code> por si quieres borrarlo.</p>
+
+<h2>7. Estado y limitaciones</h2>
+<table>
+  <tr><th>Función</th><th>Estado</th></tr>
+  <tr><td>Reproducción por las 6 salidas de línea y los 2 auriculares</td><td class="ok">Funciona, verificado</td></tr>
+  <tr><td>Rueda de monitor como volumen general</td><td class="ok">Funciona, verificado</td></tr>
+  <tr><td>Arranque automático, reinicio del Mac y de la Mbox</td><td class="ok">Funciona, verificado</td></tr>
+  <tr><td>Grabación desde las entradas</td><td class="pend">Funciona, pero con defectos conocidos; aún no apta para grabar en serio</td></tr>
+  <tr><td>S/PDIF</td><td class="pend">Encaminado, sin probar</td></tr>
+  <tr><td>Frecuencias distintas de 48 kHz</td><td class="pend">No disponibles</td></tr>
+  <tr><td>Mac con Apple Silicon y Sequoia</td><td class="pend">Debería funcionar; sin probar</td></tr>
+</table>
+
+<h2>8. Cómo funciona, en breve</h2>
+<p>macOS Sequoia todavía trae la pila FireWire de Apple, pero el servicio de audio (<code>coreaudiod</code>) corre en una
+caja de arena que le prohíbe hablar FireWire. Por eso hay dos piezas: el <b>plugin</b> vive dentro de <code>coreaudiod</code> y
+solo intercambia audio por memoria compartida; el <b>ayudante</b> corre como tu usuario, habla FireWire con la Mbox mediante
+la biblioteca pública <code>IOFireWireLib</code> y mantiene los dos flujos isócronos (protocolo IEC 61883‑6, chip TCAT DICE).</p>
+<p>El reloj que ve CoreAudio se deriva del ciclo del bus FireWire, al que la Mbox está sincronizada; así ningún reloj deriva
+respecto de otro. La configuración del aparato (rutas, mezclador interno y rueda) se reconstruyó comparando con volcados del
+driver original de Avid en Mojave y con el driver ASFireWire.</p>
+<p class="meta">Proyecto Remedia Lab. Desarrollado en colaboración humano‑IA (Claude, de Anthropic); el proceso está documentado.
+Avid y Mbox son marcas de Avid Technology, que no participa ni respalda este proyecto.</p>
+
+</body>
+</html>
