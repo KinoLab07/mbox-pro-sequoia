@@ -12,7 +12,7 @@ para cualquier usuario, está en `doc/Mbox-Pro-Sequoia-Guia.pdf`.
 ./desinstalar.sh    # lo quita todo
 ```
 
-**Tras encender la Mbox todo está en silencio hasta que subes la rueda de monitor.**
+**La rueda de monitor es el volumen general; si no suena, comprueba que no esté abajo del todo.**
 
 ## Qué hay
 

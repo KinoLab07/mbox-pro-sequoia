@@ -160,5 +160,5 @@ tail -n 12 "$HOME/Library/Logs/MboxPro.log" 2>/dev/null | sed 's/^/     /'
 
 print "\n${NEGRITA}Listo.${NORMAL}"
 print "  - Elige \"Mbox Pro (FireWire)\" como salida en Ajustes del Sistema > Sonido."
-print "  - Tras encender la Mbox todo esta en silencio: SUBE LA RUEDA DE MONITOR."
+print "  - La rueda de monitor es el volumen general: si no suena, comprueba que no este abajo."
 print "  - Diagnostico: ./estado.sh     Desinstalar: ./desinstalar.sh"

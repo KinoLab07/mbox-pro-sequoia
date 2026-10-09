@@ -37,7 +37,7 @@
 <div class="portada">
   <h1>Avid Mbox Pro en macOS Sequoia</h1>
   <p class="sub">Driver libre para la Mbox Pro de 3.ª generación (FireWire), sin desactivar SIP y sin cuenta de desarrollador de Apple</p>
-  <p class="meta">Versión 1.0 · octubre de 2026 · Probado en MacBook Pro 15" 2018 (Intel), macOS 15.8.1</p>
+  <p class="meta">Versión 1.1 · 9 de octubre de 2026 · Probado en MacBook Pro 15" 2018 (Intel), macOS 15.8.1</p>
 </div>
 
 <h2>1. Qué es esto</h2>
@@ -84,8 +84,8 @@ el problema está ahí, no en el driver.</p>
 
 <h2>4. Uso</h2>
 <h3>Lo único que hay que recordar</h3>
-<div class="aviso"><b>Después de encender la Mbox, todo está en silencio hasta que giras la rueda de monitor.</b>
-La rueda no tiene tope: es un codificador que arranca en cero cada vez que la Mbox se enciende. Súbela y el sonido aparece.</div>
+<div class="aviso"><b>La rueda de monitor es el volumen general de las seis salidas.</b> La Mbox recuerda su posición al apagarla.
+Si no oyes nada, lo primero es comprobar que la rueda no esté abajo del todo.</div>
 <h3>Elegir la Mbox como salida</h3>
 <p><b>Ajustes del Sistema → Sonido → Salida → «Mbox Pro (FireWire)»</b>. En programas de audio (REAPER, Logic, Ableton…), elígela en sus preferencias de dispositivo.</p>
 <h3>Qué sale por dónde</h3>
@@ -104,6 +104,12 @@ La rueda de monitor actúa como <b>volumen general de las seis salidas analógic
   <li>Tamaño de búfer: funciona de 64 a 512 muestras sin cortes. La latencia de salida se ajusta sola al búfer que use cada programa (≈ 10 ms con 512, ≈ 25 ms con búferes pequeños).</li>
   <li>En REAPER: <i>Preferencias → Audio → Device</i>, marca <i>Request block size</i> y escribe el valor.</li>
 </ul>
+<h3>Apagar la Mbox, dormir el Mac</h3>
+<ul>
+  <li><b>Apagar y encender la Mbox</b> con el Mac encendido: vuelve a sonar sola en unos 10 segundos, al mismo volumen.</li>
+  <li><b>Dormir y despertar el Mac</b>: la Mbox vuelve sola en 15–40 segundos. Los navegadores (Chrome, Brave, Safari) a veces se quedan
+  mudos tras el corte: <b>recarga la pestaña</b> (Cmd+R). Los programas de audio suelen recuperarse solos o con pausa y reproducir.</li>
+</ul>
 
 <h2 class="salto">5. Si algo no va</h2>
 <h3>El diagnóstico</h3>
@@ -115,12 +121,16 @@ La rueda de monitor actúa como <b>volumen general de las seis salidas analógic
 <h3>Problemas frecuentes</h3>
 <table>
   <tr><th style="width:32%">Síntoma</th><th>Qué hacer</th></tr>
-  <tr><td>No suena nada, pero todo aparece bien</td><td><b>Sube la rueda de monitor.</b> Tras cada encendido de la Mbox arranca en silencio.</td></tr>
-  <tr><td>No suena tras encender la Mbox con el Mac ya encendido</td><td>Espera unos 10 segundos: el ayudante detecta la Mbox y la configura solo. Luego sube la rueda.</td></tr>
+  <tr><td>No suena nada, pero todo aparece bien</td><td><b>Comprueba la rueda de monitor.</b> Si está abajo del todo, no sale nada por las líneas.</td></tr>
+  <tr><td>No suena tras encender la Mbox con el Mac ya encendido</td><td>Espera unos 10 segundos: el ayudante detecta la Mbox y la configura solo.</td></tr>
+  <tr><td>El navegador no suena tras dormir el Mac</td><td>Recarga la pestaña (Cmd+R).</td></tr>
   <tr><td>El diagnóstico dice «COLGADO» en FireWire</td><td>La pila FireWire de macOS se quedó atascada (pasa a veces al desconectar en caliente). <b>Reinicia el Mac.</b> Apagar la Mbox no sirve.</td></tr>
   <tr><td>«no veo la Mbox Pro»</td><td>Comprueba que está encendida, el cable y los adaptadores. <code>system_profiler SPFireWireDataType</code> debe listarla.</td></tr>
   <tr><td>No aparece «Mbox Pro (FireWire)» en Sonido</td><td>Vuelve a lanzar <code>instalar.sh</code>. Si persiste, reinicia el Mac.</td></tr>
   <tr><td>Un programa dejó de sonar tras reiniciar el ayudante</td><td>Pausa y vuelve a reproducir, o vuelve a seleccionar la Mbox en el programa.</td></tr>
+  <tr><td>Interferencia de radio en una entrada</td><td>Es analógica, anterior al convertidor: el driver no la produce. Pasa con micrófonos de condensador sin 48V
+  (actívalo) y con fuentes pasivas de alta impedancia (geófonos, pastillas) en la entrada de micrófono con mucha ganancia: usa la entrada de
+  instrumento o una caja DI, cable corto y apantallado. El 48V tarda en descargarse: tras apagarlo el micrófono sigue sonando un rato.</td></tr>
 </table>
 <p>En el registro, la línea «entradas en silencio» al arrancar es normal si no hay nada conectado a las entradas.</p>
 
@@ -133,8 +143,12 @@ La rueda de monitor actúa como <b>volumen general de las seis salidas analógic
   <tr><th>Función</th><th>Estado</th></tr>
   <tr><td>Reproducción por las 6 salidas de línea y los 2 auriculares</td><td class="ok">Funciona, verificado</td></tr>
   <tr><td>Rueda de monitor como volumen general</td><td class="ok">Funciona, verificado</td></tr>
-  <tr><td>Arranque automático, reinicio del Mac y de la Mbox</td><td class="ok">Funciona, verificado</td></tr>
-  <tr><td>Grabación desde las entradas</td><td class="pend">Funciona, pero con defectos conocidos; aún no apta para grabar en serio</td></tr>
+  <tr><td>Arranque automático y reinicio del Mac</td><td class="ok">Funciona, verificado</td></tr>
+  <tr><td>Apagar y encender la Mbox con el Mac encendido</td><td class="ok">Funciona, verificado (vuelve en ~10 s)</td></tr>
+  <tr><td>Dormir y despertar el Mac</td><td class="ok">Funciona; el navegador puede pedir recargar la pestaña</td></tr>
+  <tr><td>Grabación desde las entradas (micrófono, geófono)</td><td class="ok">Funciona; tomas de prueba sin huecos ni repeticiones</td></tr>
+  <tr><td>Latencia de entrada declarada</td><td class="pend">Estimada, sin medir con cable de retorno</td></tr>
+  <tr><td>Desconectar el cable FireWire en caliente</td><td class="pend">Sin probar; puede colgar la pila FireWire (reiniciar el Mac)</td></tr>
   <tr><td>S/PDIF</td><td class="pend">Encaminado, sin probar</td></tr>
   <tr><td>Frecuencias distintas de 48 kHz</td><td class="pend">No disponibles</td></tr>
   <tr><td>Mac con Apple Silicon y Sequoia</td><td class="pend">Debería funcionar; sin probar</td></tr>

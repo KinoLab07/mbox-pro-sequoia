@@ -36,4 +36,4 @@ else no "CoreAudio no publica el aparato: reinstala o reinicia el Mac"; fi
 
 print "\n== Ultimas lineas del registro (~/Library/Logs/MboxPro.log)"
 tail -n 20 "$HOME/Library/Logs/MboxPro.log" 2>/dev/null | sed 's/^/   /' || print "   (sin registro)"
-print "\nRecuerda: tras encender la Mbox todo esta en silencio hasta que subes la rueda de monitor."
+print "\nSi no suena: comprueba la rueda de monitor (volumen general). Tras dormir el Mac, recarga la pestaña del navegador."
