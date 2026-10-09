@@ -703,6 +703,9 @@ int main(void) {
             if (enganchado) break;
         }
         }
+        // Si no engancha, salir y que launchd relance. Medido el 9 oct al
+        // despertar el Mac: reintentar en el MISMO proceso (tres vueltas) no
+        // engancha nunca, y un proceso nuevo engancha a la primera.
         if (!enganchado) Fallo(3, "el receptor de la Mbox no engancha con ningun SYT");
         for (int i = 0; i < NPKT_R; i++) memset(br + (size_t)i * PKT_R, 0, 12);
         primera = 1; slot = 0;
