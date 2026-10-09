@@ -112,6 +112,12 @@ static void alParar(int s) { (void)s; gParar = 1; }
 // algo fallo (Mbox apagada, reinicio del bus, el Mac se durmio...): launchd
 // relanza el ayudante, que espera a la Mbox y la vuelve a configurar entera.
 static volatile int gCodigoSalida = 0;
+// La memoria compartida se marca como invalida en CUALQUIER salida. Antes solo
+// se hacia en la salida normal: un arranque fallido dejaba un segmento con la
+// magia valida, el plugin se enganchaba a el durante sus 5 s de vida y se
+// quedaba ahi para siempre (medido el 9 oct: apagar la Mbox la dejaba muda).
+static MboxCab *gCabGlobal = NULL;
+static void InvalidarCompartida(void) { if (gCabGlobal) { gCabGlobal->magia = 0; gCabGlobal->anclaHost = 0; } }
 static void Fallo(int codigo, const char *por) {
     if (!gCodigoSalida) gCodigoSalida = codigo;
     fprintf(stderr, "\nmboxd: %s; salgo para que me relancen\n", por);
@@ -481,6 +487,7 @@ int main(void) {
     if (sp == MAP_FAILED) { perror("mmap"); return 1; }
     memset(sp, 0, MBOX_BYTES_TOTAL);
     MboxCab *cab = (MboxCab *)sp;
+    gCabGlobal = cab; atexit(InvalidarCompartida);
     float *anCap = (float *)((char *)sp + MBOX_DESPL_CAPTURA);
     float *anRep = (float *)((char *)sp + MBOX_DESPL_REPRO);
     cab->canales = MBOX_CANALES; cab->tasa = MBOX_TASA;

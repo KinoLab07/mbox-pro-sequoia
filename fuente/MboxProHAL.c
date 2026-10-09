@@ -79,10 +79,16 @@ static void AbrirCompartida(void) {
     REG("ayudante encontrado: %u canales a %u Hz", c->canales, c->tasa);
 }
 
+static UInt64 gOrigen = 0;      // marcos del ayudante que valen "muestra 0"
+static UInt64 gSemilla = 1;
+static int    gAnclado = 0;
+
 static void CerrarCompartida(void) {
     if (!gCab) return;
     munmap((void *)gCab, MBOX_BYTES_TOTAL);
     gCab = NULL; gAnCaptura = NULL; gAnRepro = NULL;
+    // La linea de tiempo se corta: que CoreAudio lo sepa al reconectar.
+    if (gAnclado) { gAnclado = 0; ++gSemilla; }
 }
 
 // El ayudante casi siempre arranca DESPUES que coreaudiod, y si la Mbox es la
@@ -93,6 +99,20 @@ static void ReintentarCompartida(void) {
     static UInt64 ultimo = 0;
     UInt64 ahora = mach_absolute_time();
     if (gCab && gCab->magia != MBOX_MAGIA) { REG("el ayudante se fue"); CerrarCompartida(); }
+    // Si el ayudante lleva 2 s sin dar senales de vida, soltar el segmento y
+    // volver a buscar: puede haberse relanzado con uno nuevo y este estar
+    // muerto aunque su magia siga valida.
+    {
+        static UInt64 vivoUltimo = 0;
+        if (gCab) {
+            UInt64 a = gCab->anclaHost;
+            if (a && ahora > a && (double)(ahora - a) < 0.5 * MBOX_TASA * gTicksPorMarco) vivoUltimo = ahora;
+            else if (!vivoUltimo) vivoUltimo = ahora;
+            else if ((double)(ahora - vivoUltimo) > 2.0 * MBOX_TASA * gTicksPorMarco) {
+                REG("el ayudante no da senales; vuelvo a buscarlo"); CerrarCompartida(); vivoUltimo = 0;
+            }
+        }
+    }
     if (gCab) return;
     if (ultimo && (double)(ahora - ultimo) < 1.0 * MBOX_TASA * gTicksPorMarco) return;
     ultimo = ahora;
@@ -118,9 +138,7 @@ static Float64 gAnclaMuestra = 0;
 // asi que hay que restarle un origen para empezar cerca de cero, y hay que subir
 // la semilla cada vez que ese origen se mueve (al enganchar, al reiniciarse el
 // ayudante, al pasar del reloj propio al suyo).
-static UInt64 gOrigen = 0;      // marcos del ayudante que valen "muestra 0"
-static UInt64 gSemilla = 1;
-static int    gAnclado = 0;
+// (gOrigen, gSemilla y gAnclado estan declarados mas arriba)
 
 static void PrepararTiempo(void) {
     mach_timebase_info_data_t t; mach_timebase_info(&t);
