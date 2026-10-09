@@ -685,8 +685,14 @@ int main(void) {
     if (!soloRx) {
         static const int pruebas[] = { 3, 1, -1, 5, -3, 8, -5, 12, -8, 16, 2, 0, 4, -2, 6, 10 };
         int enganchado = 0;
+        // Tras despertar el Mac la Mbox tarda en aceptar el flujo: una vuelta
+        // completa de pruebas no bastaba y el ayudante salia, lo que costaba un
+        // segundo corte (y un segundo pausa-play en el navegador). Ahora se dan
+        // hasta tres vueltas, con una pausa entre ellas, sin salir.
+        for (int vuelta = 0; vuelta < 3 && !enganchado && !gParar; vuelta++) {
+        if (vuelta) { fprintf(stderr, "mboxd: sin enganche; espero y repito las pruebas (vuelta %d)\n", vuelta + 1); sleep(2); }
         for (unsigned k = 0; k < sizeof pruebas / sizeof pruebas[0]; k++) {
-            if (k) { ANCLAR(pruebas[k]); }
+            if (k || vuelta) { ANCLAR(pruebas[k]); }
             for (int i = 0; i < 6 && !enganchado; i++) {
                 usleep(100000);
                 CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0, true);
@@ -695,6 +701,7 @@ int main(void) {
             printf("mboxd: SYT a %+d ciclos -> receptor de la Mbox %s\n", pruebas[k],
                    enganchado ? "ENGANCHADO" : "sin enganchar");
             if (enganchado) break;
+        }
         }
         if (!enganchado) Fallo(3, "el receptor de la Mbox no engancha con ningun SYT");
         for (int i = 0; i < NPKT_R; i++) memset(br + (size_t)i * PKT_R, 0, 12);
