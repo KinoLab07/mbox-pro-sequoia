@@ -44,3 +44,10 @@ Solo para depurar; el agente no usa ninguna salvo `MBOX_QUIETO=1`.
 
 La historia técnica (qué se probó, qué falló y por qué) está en
 `~/Desktop/MBOX/3-DOCUMENTACION/SEQUOIA-ESPACIO-USUARIO.md`.
+
+## Licencia
+
+Apache-2.0 (ver `LICENSE` y `NOTICE`). Se puede usar, modificar y redistribuir,
+incluso comercialmente, conservando el aviso de copyright.
+
+No está asociado a Avid Technology, Inc. ni respaldado por ella.

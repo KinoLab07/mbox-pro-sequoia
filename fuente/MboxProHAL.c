@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2026 KinoLab07
+//
 // MboxProHAL.c - AudioServerPlugin que publica el Avid Mbox Pro ante CoreAudio.
 //
 // Corre DENTRO de coreaudiod, que esta en caja de arena y no puede abrir

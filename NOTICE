@@ -1,0 +1,13 @@
+Avid Mbox Pro en macOS Sequoia
+Copyright (c) 2026 KinoLab07
+
+Este producto incluye software desarrollado por KinoLab07.
+
+El mapa de registros DICE/TCAT y el protocolo EAP en que se apoya este
+driver se dedujeron leyendo el aparato y comparando con el proyecto
+ASFireWire (https://github.com/mrmidi/ASFireWire), tambien bajo
+Apache-2.0. Ninguna linea de codigo se copio de el: lo compartido es
+conocimiento del protocolo, no implementacion.
+
+"Avid" y "Mbox" son marcas de sus respectivos titulares. Este proyecto no
+esta asociado a Avid Technology, Inc. ni respaldado por ella.

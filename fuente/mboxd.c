@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2026 KinoLab07
+//
 // mboxd - el ayudante. Posee el FireWire y hace de puente con el plugin del HAL.
 //
 // Corre como el usuario normal, sin privilegios y con SIP activado. Mantiene los

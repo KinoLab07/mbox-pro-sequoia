@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: Apache-2.0
+// Copyright (c) 2026 KinoLab07
+//
 // mboxshm.h - el contrato entre las dos piezas.
 //
 // El plugin del HAL vive DENTRO de coreaudiod, que corre como el usuario

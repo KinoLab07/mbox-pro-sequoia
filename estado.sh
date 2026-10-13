@@ -1,4 +1,6 @@
 #!/bin/zsh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 KinoLab07
 # Diagnostico: dice que pieza falla. Solo lee, no cambia nada.
 ETIQUETA="lab.remedia.mboxd"
 ok()  { print "  [ok]  $1"; }

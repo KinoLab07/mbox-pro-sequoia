@@ -1,4 +1,6 @@
 #!/bin/zsh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 KinoLab07
 # Instala el driver de la Avid Mbox Pro (3a generacion, FireWire) para macOS
 # Sequoia y anteriores con pila FireWire, SIN desactivar SIP y sin cuenta de
 # desarrollador de Apple.

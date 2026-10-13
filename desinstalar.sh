@@ -1,4 +1,6 @@
 #!/bin/zsh
+# SPDX-License-Identifier: Apache-2.0
+# Copyright (c) 2026 KinoLab07
 # Quita todo lo que instala ./instalar.sh y deja la Mbox en reposo.
 cd "$(dirname "$0")"
 ETIQUETA="lab.remedia.mboxd"
