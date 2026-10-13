@@ -42,8 +42,6 @@ Solo para depurar; el agente no usa ninguna salvo `MBOX_QUIETO=1`.
 | `MBOX_APP=modo,uitarget,input,led` | fuerza la sección de aplicación |
 | `SIGUSR1` | vuelca 3 s de lo enviado a `/tmp/mbox-enviado.raw` |
 
-La historia técnica (qué se probó, qué falló y por qué) está en
-`~/Desktop/MBOX/3-DOCUMENTACION/SEQUOIA-ESPACIO-USUARIO.md`.
 
 ## Licencia
 
